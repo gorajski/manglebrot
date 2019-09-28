@@ -20,8 +20,20 @@ Complex.prototype.draw = function(context, color, size) {
 }
 
 Complex.prototype.isInMandelbrot = function(count, z) {
-	if (z.mag > 2) { return false }
-	if (count > 50) { return true }
+
+	if (z.mag > 2.35) {
+		let red = 0
+		let green = (13*count)
+		let blue = (15*count)
+		return `rgb(${red}, ${green}, ${blue})`
+	}
+	if (z.mag > 2) { 
+		let red = (45*count)
+		let green = 0
+		let blue = 0
+		return `rgb(${red}, ${green}, ${blue})`
+	}
+	if (count > 20) { return "#000000" }
 	return this.isInMandelbrot(count+=1, z.squared().add(this))
 }
 

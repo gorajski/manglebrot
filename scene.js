@@ -12,16 +12,16 @@ Scene.prototype.draw = function() {
 }
 
 Scene.prototype.drawMandelbrot = function() {
-	let z = new Complex(1.8*Math.random()-0.9, 1.8*Math.random()-0.9, this.x, this.y)
+	let z = new Complex(0, 0, this.x, this.y)
 	
 	for (let i = -this.x; i < this.x; i += 1) {
 		for (let j = -this.y; j < this.y; j += 1) {
 
 		let cc = new Complex(i/300, j/300, this.x, this.y)
 			
-		if (cc.isInMandelbrot(0, z)) {
-			cc.draw(this.c, "#2211cc", 1)
-		}
+
+		cc.draw(this.c, cc.isInMandelbrot(0, z), 1)
+
 
 		} 
 	}
