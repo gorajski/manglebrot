@@ -3,15 +3,13 @@ let canvas = document.querySelector('canvas')
 canvas.width = innerWidth;
 canvas.height = innerHeight;
 
-
-let scene = new Scene(canvas)
-
 window.addEventListener('resize', () => {
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
 })
 
 requestAnimationFrame(animate)
+let scene = new Scene(canvas)
 	
 function animate() {
 	let c = canvas.getContext('2d')
