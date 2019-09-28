@@ -14,9 +14,9 @@ Complex.prototype.add = function(complex) {
 	return new Complex(this.real + complex.real, this.img + complex.img, this.x, this.y)
 }
 
-Complex.prototype.draw = function(context, color) {
+Complex.prototype.draw = function(context, color, size) {
 	context.fillStyle = color
-	context.fillRect(300*this.real + this.x, 300*this.img + this.y, 1, 1)
+	context.fillRect(300*this.real + this.x, 300*this.img + this.y, size, size)
 }
 
 Complex.prototype.isInMandelbrot = function(count, z) {
