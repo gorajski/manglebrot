@@ -15,5 +15,5 @@ Complex.prototype.add = function(complex) {
 }
 
 Complex.prototype.draw = function(context) {
-	context.fillRect(300*this.real + this.x, 300*this.img + this.y, 4, 4)
+	context.fillRect(300*this.real + this.x, 300*this.img + this.y, 1, 1)
 }
