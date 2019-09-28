@@ -1,3 +1,5 @@
+const RESOLUTION = 200
+
 let Complex = function(real, img, originX, originY) {
 	this.real = real
 	this.img = img
@@ -16,17 +18,20 @@ Complex.prototype.add = function(complex) {
 
 Complex.prototype.draw = function(context, color, size) {
 	context.fillStyle = color
-	context.fillRect(300*this.real + this.x, 300*this.img + this.y, size, size)
+	context.fillRect(250*this.real + this.x, 250*this.img + this.y, size, size)
 }
 
-Complex.prototype.isInMandelbrot = function(count, z) {
-	if (z.mag > 2) { 
-		let red = (255*Math.tan((2*Math.PI*count/15)))
-		let green = (255*Math.tan((2*Math.PI*count/15)-Math.PI/4))
-		let blue = (255*Math.tan((2*Math.PI*count/15)+Math.PI/4))
-		return `rgb(${red}, ${green}, ${blue})`
-	}
-	if (count > 100) { return "#000000" }
-	return this.isInMandelbrot(count+=1, z.squared().add(this))
+Complex.prototype.isInMandelbrotSet = function(count, z) {
+	if (z.mag > 2) { return colorMapping(count) }
+	if (count > RESOLUTION) { return "#000000" }
+	return this.isInMandelbrotSet(count+=1, z.squared().add(this))
 }
 
+
+
+let colorMapping = function(count) {
+	let red = 	255 * Math.tan(Math.PI * ((2*count/15)))
+	let green = 255 * Math.tan(Math.PI * ((2*count/15) - 1/4))
+	let blue = 	255 * Math.tan(Math.PI * ((2*count/15) + 1/4))
+	return `rgb(${red}, ${green}, ${blue})`
+}
