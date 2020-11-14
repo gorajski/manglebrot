@@ -1,0 +1,7 @@
+global: true
+pairs:
+  gor: Nick Gorajski;nickgorajski
+email:
+  prefix: pair
+  domain: gmail.com
+  no_solo_prefix: true
