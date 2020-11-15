@@ -1,5 +1,12 @@
 let MandelbrotPlotter = function() {
+	
+}
 
+MandelbrotPlotter.prototype.init = function(x, y) {
+	x = frame.left + frame.stepX * i
+	y = frame.bottom + frame.stepY * j
+
+	let cVar = new Complex(x, y)
 }
 
 MandelbrotPlotter.prototype.computeColor = function(zVar, cVar, count) {

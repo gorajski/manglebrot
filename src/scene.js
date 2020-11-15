@@ -10,32 +10,49 @@ let Scene = function(canvas) {
 
 Scene.prototype.draw = function(frame) {
 	let zVar = new Complex(
-		1.4*Math.random()-0.7,		// 0 for standard Mandelbrot
-		1.4*Math.random()-0.7		// 0 for standard Mandelbrot
-		// 0,0
+		// 1.4*Math.random()-0.7,		// 0 for standard Mandelbrot
+		// 1.4*Math.random()-0.7		// 0 for standard Mandelbrot
+		0,0
 	)
 
-	this.drawMandelbrot(zVar, frame)
+	this.drawPlot(zVar, frame)
 	this.drawSeed(zVar)
 	this.drawAxes()
 }
 
-Scene.prototype.drawMandelbrot = function(zVar, frame) {
+let f = function(x) {
+	return 0.2*Math.sin(9*x)/x
+}
+
+Scene.prototype.drawPlot = function(zVar, frame) {
 	
 	let plotter = new MandelbrotPlotter()
 	
 	for (let i = 0; i < this.sceneWidth; i += 1) {
+		let color
 		for (let j = 0; j < this.sceneHeight; j += 1) {
 			let x = frame.left + frame.stepX * i
-			let y = frame.bottom + frame.stepY * j
-			let cVar = new Complex(x, y)
-			let color = plotter.computeColor(zVar, cVar, 0)
+			let y = -frame.bottom - frame.stepY * j
+
+			// let cVar = new Complex(x, y)
+
+			// let color = plotter.computeColor(zVar, cVar, 0)
+
+			// let red = Math.floor(255 * i/this.sceneWidth)
+			// let green = Math.floor(255 * i*j / (2*this.sceneWidth*this.sceneHeight))
+			// let blue = Math.floor(255 * j/this.sceneHeight)
+
+			// color = `rgb(${red}, ${green}, ${blue})`
+
+			let color = "rgb(0,0,0)"
+			if (y > f(x) && 
+				y < f(x) + frame.stepY) 
+				{ color = "rgb(255,255,255)" }
 
 			this.context.fillStyle = color
 			this.context.fillRect(i, j, 1, 1)
 		} 
 	}
-
 }
 
 Scene.prototype.drawSeed = function(z) {
