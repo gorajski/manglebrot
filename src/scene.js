@@ -1,21 +1,31 @@
 const RESOLUTION = 120
 
-let Scene = function(canvas) {
+let Scene = function(canvas, frame) {
 	this.context = canvas.getContext('2d')
-	this.sceneWidth = canvas.width
-	this.sceneHeight = canvas.height
-	this.originX = canvas.width / 2
-	this.originY = canvas.height / 2
+	this.width = canvas.width
+	this.height = canvas.height
+	
+	this.frame = frame
 }
 
-Scene.prototype.draw = function(frame) {
+Scene.prototype.calculateSceneCoordinate = function(x, y) {
+	percentX = (x - this.frame.left) / (this.frame.right - this.frame.left)
+	percentY = (this.frame.top - y) / (this.frame.top - this.frame.bottom)
+
+	return {
+		x: percentX * this.width,
+		y: percentY * this.height
+	}
+}
+
+Scene.prototype.draw = function() {
 	let zVar = new Complex(
 		// 1.4*Math.random()-0.7,		// 0 for standard Mandelbrot
 		// 1.4*Math.random()-0.7		// 0 for standard Mandelbrot
 		0,0
 	)
 
-	this.drawPlot(zVar, frame)
+	this.drawPlot(zVar, this.frame)
 	this.drawSeed(zVar)
 	this.drawAxes()
 }
@@ -24,16 +34,15 @@ let f = function(x) {
 	return 0.2*Math.sin(9*x)/x
 }
 
-Scene.prototype.drawPlot = function(zVar, frame) {
+Scene.prototype.drawPlot = function(zVar) {
 	
 	let plotter = new MandelbrotPlotter()
-	
-	for (let i = 0; i < this.sceneWidth; i += 1) {
-		let color
-		for (let j = 0; j < this.sceneHeight; j += 1) {
-			let x = frame.left + frame.stepX * i
-			let y = -frame.bottom - frame.stepY * j
 
+	for (let i = 0; i < this.width; i += 1) {
+		for (let j = 0; j < this.height; j += 1) {
+			let x = this.frame.left + this.frame.stepX * i
+			let y = -(this.frame.bottom + this.frame.stepY * j)
+			
 			// let cVar = new Complex(x, y)
 
 			// let color = plotter.computeColor(zVar, cVar, 0)
@@ -45,26 +54,33 @@ Scene.prototype.drawPlot = function(zVar, frame) {
 			// color = `rgb(${red}, ${green}, ${blue})`
 
 			let color = "rgb(0,0,0)"
-			if (y > f(x) && 
-				y < f(x) + frame.stepY) 
-				{ color = "rgb(255,255,255)" }
+			if (y >= f(x) && y < f(x) + this.frame.stepY) {
+				color = "rgb(255,255,255)" 
+			}
 
 			this.context.fillStyle = color
 			this.context.fillRect(i, j, 1, 1)
+
+			// if (x === this.frame.originX || y === this.frame.originY) {
+			// 	color = "rgb(255,0,0)"
+			// 	this.context.fillStyle = color
+			// 	this.context.fillRect(i, j, 1, 1)
+			// }
 		} 
 	}
 }
 
 Scene.prototype.drawSeed = function(z) {
-	this.context.fillStyle = "#000000"
-	this.context.fillRect(550*z.real + this.originX, 550*z.img + this.originY, 12, 12)
 	this.context.fillStyle = "#eeddff"
-	this.context.fillRect(550*z.real + this.originX, 550*z.img + this.originY, 10, 10)
+	this.context.fillRect(550*z.real + this.originX, 550*z.img + this.originY, 4, 4)
 }
 
 Scene.prototype.drawAxes = function() {
-	this.context.fillStyle = "#ff4444"
-	this.context.fillRect(this.originX, 0, 1, this.sceneHeight)
-	this.context.fillRect(0, this.originY, this.sceneWidth, 1)
+	this.context.fillStyle = "#44ff44"
+
+	let origin = this.calculateSceneCoordinate(this.frame.originX, this.frame.originY)
+
+	this.context.fillRect(origin.x, 0, 1, this.height)  // vertical axis
+	this.context.fillRect(0, origin.y, this.width, 1)  // horizontal axis
 }
 

@@ -1,37 +1,52 @@
-const SWING_PERCENT = 0.05
+// The frame's job is to define a bounded plane of Euclidean space, for 
+// the intention of displaying it on the screen.
 
-let ViewFrame = function(left, right, bottom, top, width, height) {
-	this.top = top
-	this.bottom = bottom
+let ViewFrame = function(left, right, bottom, top, horzPixelCount, vertPixelCount) {
 	this.left = left
 	this.right = right
-	this.width = width
-	this.height = height
+	this.top = top
+	this.bottom = bottom
 
-	this.stepX = (this.right - this.left) / width
-	this.stepY = (this.top - this.bottom) / height
+	this.horzPixelCount = horzPixelCount + (horzPixelCount%2 === 0 ? 0 : 1)
+	this.vertPixelCount = vertPixelCount + (vertPixelCount%2 === 0 ? 0 : 1)
+
+	this.stepX = (this.right - this.left) / this.horzPixelCount
+	this.stepY = (this.top - this.bottom) / this.vertPixelCount
+
+	Object.defineProperty(this, "originX", {
+		value: 0,
+		writable: false,
+		enumerable: true,
+		configurable: true
+	})
+	Object.defineProperty(this, "originY", {
+		value: 0,
+		writable: false,
+		enumerable: true,
+		configurable: true
+	})
 }
 
-ViewFrame.prototype.stepDown = function() {
-	let range = this.top - this.bottom
-	this.top += SWING_PERCENT * range
-	this.bottom += SWING_PERCENT * range
+ViewFrame.prototype.shiftDown = function(screenPercent) {
+	const range = this.top - this.bottom
+	this.top += screenPercent * range
+	this.bottom += screenPercent * range
 }
 
-ViewFrame.prototype.stepUp = function() {
-	let range = this.top - this.bottom
-	this.top -= SWING_PERCENT * range
-	this.bottom -= SWING_PERCENT * range
+ViewFrame.prototype.shiftUp = function(screenPercent) {
+	const range = this.top - this.bottom
+	this.top -= screenPercent * range
+	this.bottom -= screenPercent * range
 }
 
-ViewFrame.prototype.stepLeft = function() {
-	let range = this.right - this.left
-	this.right += SWING_PERCENT * range
-	this.left += SWING_PERCENT * range
+ViewFrame.prototype.shiftLeft = function(screenPercent) {
+	const domain = this.right - this.left
+	this.right -= screenPercent * domain
+	this.left -= screenPercent * domain
 }
 
-ViewFrame.prototype.stepRight = function() {
-	let range = this.right - this.left
-	this.right -= SWING_PERCENT * range
-	this.left -= SWING_PERCENT * range
+ViewFrame.prototype.shiftRight = function(screenPercent) {
+	const domain = this.right - this.left
+	this.right += screenPercent * domain
+	this.left += screenPercent * domain
 }
