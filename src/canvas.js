@@ -2,25 +2,37 @@ let canvas = document.querySelector('canvas')
 canvas.width = Number(innerWidth);
 canvas.height = Number(innerHeight);
 
-let frame = new ViewFrame(-2.5, 2.5, -2.5, 2.5, canvas.width, canvas.height)
+let frame = new ViewFrame(-5, 5, -5, 5, canvas.width, canvas.height)
+
+requestAnimationFrame(drawScene)
+
+function drawScene() {
+	let c = canvas.getContext('2d')
+	c.clearRect(0, 0, innerWidth, innerHeight)  // needed?
+
+	frame.updatePixelCountsAndStepSizes(canvas.width, canvas.height)
+
+	let scene = new Scene(canvas, frame)
+	scene.draw()
+}
 
 window.addEventListener('resize', () => {
-	canvas.width = window.innerWidth;
-	canvas.height = window.innerHeight;
+	canvas.width = Number(innerWidth);
+	canvas.height = Number(innerHeight);
 
-	drawFrame()
+	drawScene()
 })
 
 window.addEventListener('mousedown', () => {
-	canvas.width = window.innerWidth;
-	canvas.height = window.innerHeight;
+	canvas.width = Number(innerWidth);
+	canvas.height = Number(innerHeight);
 
-	drawFrame()
+	drawScene()
 })
 
 window.addEventListener("keydown", (e) => {
-	canvas.width = window.innerWidth;
-	canvas.height = window.innerHeight;
+	canvas.width = Number(innerWidth);
+	canvas.height = Number(innerHeight);
 
 	const LEFT = 37, RIGHT = 39, UP = 38, DOWN = 40
 	if (e.keyCode === DOWN) {
@@ -33,15 +45,5 @@ window.addEventListener("keydown", (e) => {
 		frame.shiftRight(0.05)
 	}
 
-	drawFrame()
+	drawScene()
 }, false)
-
-requestAnimationFrame(drawFrame)
-	
-function drawFrame() {
-	let c = canvas.getContext('2d')
-	c.clearRect(0, 0, innerWidth, innerHeight)
-
-	let scene = new Scene(canvas, frame)
-	scene.draw()
-}

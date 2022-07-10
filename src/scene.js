@@ -19,17 +19,11 @@ Scene.prototype.calculateSceneCoordinate = function(x, y) {
 }
 
 Scene.prototype.draw = function() {
-	// let zVar = new Complex(
-	// 	1.4*Math.random()-0.7,		// 0 for standard Mandelbrot
-	// 	1.4*Math.random()-0.7		// 0 for standard Mandelbrot
-	// 	// 0,0
-	// )
-
 	this.drawPlot()
-	// this.drawSeed(zVar)
 	this.drawAxes()
 }
 
+// Extract to class?
 Scene.prototype.drawPlot = function() {
 	let color = "rgb(0,0,0)"
 
@@ -69,28 +63,26 @@ Scene.prototype.drawPlot = function() {
 				color = "rgb(255,255,255)"
 			}
 
-			// DRAW THE AXES...POORLY
-			// color = "rgb(0,0,0)"
-			// if (x === this.frame.originX || y === this.frame.originY) color = "rgb(255,0,255)"
-
 				this.context.fillStyle = color
 				this.context.fillRect(i, j, 1, 1)
 		}
 	}
 }
 
-Scene.prototype.drawSeed = function(z) {
-	this.context.fillStyle = "#00ddff"
-	let seed = this.calculateSceneCoordinate(z.real, z.img)
-	this.context.fillRect(seed.x, seed.y, 4, 4)
-}
-
+// Extract to class?
 Scene.prototype.drawAxes = function() {
 	this.context.fillStyle = "#44ff44"
 
 	let origin = this.calculateSceneCoordinate(this.frame.originX, this.frame.originY)
 
-	this.context.fillRect(origin.x, 0, 1, this.height)  // vertical axis
-	this.context.fillRect(0, origin.y, this.width, 1)  // horizontal axis
-}
+	function drawVerticalAxis() {
+		this.context.fillRect(origin.x, 0, 1, this.height)
+	}
 
+	function drawHorizontalAxis() {
+		this.context.fillRect(0, origin.y, this.width, 1)
+	}
+
+	drawVerticalAxis.call(this);
+	drawHorizontalAxis.call(this);
+}
