@@ -7,7 +7,7 @@ let ViewFrame = function(left, right, bottom, top, horzPixelCount, vertPixelCoun
 	this.top = top
 	this.bottom = bottom
 
-	this.updatePixelCountsAndStepSizes(horzPixelCount, vertPixelCount)
+	this.updateStepSizes(horzPixelCount, vertPixelCount)
 
 	Object.defineProperty(this, "originX", {
 		value: 0,
@@ -23,12 +23,12 @@ let ViewFrame = function(left, right, bottom, top, horzPixelCount, vertPixelCoun
 	})
 }
 
-ViewFrame.prototype.updatePixelCountsAndStepSizes = function(horzPixelCount, vertPixelCount) {
-	this.horzPixelCount = horzPixelCount + (horzPixelCount%2 === 0 ? 0 : 1)
-	this.vertPixelCount = vertPixelCount + (vertPixelCount%2 === 0 ? 0 : 1)
+ViewFrame.prototype.updateStepSizes = function(horzPixelCount, vertPixelCount) {
+	horzPixelCount = horzPixelCount + (horzPixelCount%2 === 0 ? 0 : 1)
+	vertPixelCount = vertPixelCount + (vertPixelCount%2 === 0 ? 0 : 1)
 
-	this.stepX = (this.right - this.left) / this.horzPixelCount
-	this.stepY = (this.top - this.bottom) / this.vertPixelCount
+	this.stepX = (this.right - this.left) / horzPixelCount
+	this.stepY = (this.top - this.bottom) / vertPixelCount
 }
 
 ViewFrame.prototype.shiftDown = function(screenPercent) {

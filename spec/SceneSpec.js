@@ -329,10 +329,10 @@ describe("Scene", function () {
 // 	}
 // 	let frame = new ViewFrame(-2.5, 2.5, -2.5, 2.5, 5, 5)
 // 	let scene = new Scene(canvas, frame)
-
+//
 // 	scene.drawAxes()
-
+//
 // 	let context = canvas.getContext()
-
+//
 // 	expect(true).toBe(true)
 // })

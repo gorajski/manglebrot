@@ -10,7 +10,7 @@ function drawScene() {
 	let c = canvas.getContext('2d')
 	c.clearRect(0, 0, innerWidth, innerHeight)  // needed?
 
-	frame.updatePixelCountsAndStepSizes(canvas.width, canvas.height)
+	frame.updateStepSizes(canvas.width, canvas.height)
 
 	let scene = new Scene(canvas, frame)
 	scene.draw()
