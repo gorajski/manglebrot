@@ -38,13 +38,20 @@ Scene.prototype.initializeData = function () {
 }
 
 Scene.prototype.plotEachPixel = function(callback, data) {
+	let imageData = this.context.getImageData(0, 0, this.width, this.height)
 	for (let i = 0; i < this.width; i += 1) {
 		for (let j = 0; j < this.height; j += 1) {
 			const {red, green, blue} = callback.call(this, i, j, data)
-			this.context.fillStyle = `rgb(${red}, ${green}, ${blue})`
-			this.context.fillRect(i, j, 1, 1)
+
+			let index = (i + j * this.width) * 4
+
+			imageData.data[index + 0] = red
+			imageData.data[index + 1] = green
+			imageData.data[index + 2] = blue
+			imageData.data[index + 3] = 255
 		}
 	}
+	this.context.putImageData(imageData, 0, 0)
 }
 
 Scene.prototype.drawRectangleBasedObjects = function(callback, data) {
