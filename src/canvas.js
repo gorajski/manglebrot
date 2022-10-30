@@ -2,7 +2,7 @@ let canvas = document.querySelector('canvas')
 canvas.width = Number(innerWidth);
 canvas.height = Number(innerHeight);
 
-let frame = new ViewFrame(-5, 5, -5, 5, canvas.width, canvas.height)
+let frame = new ViewFrame(-2.5, 2.5, -2.5, 2.5, canvas.width, canvas.height)
 
 requestAnimationFrame(drawScene)
 

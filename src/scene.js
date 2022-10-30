@@ -20,7 +20,6 @@ Scene.prototype.calculateSceneCoordinate = function(x, y) {
 
 Scene.prototype.draw = function() {
 	this.drawPlot()
-	this.drawAxes()
 }
 
 Scene.prototype.initializeData = function () {
@@ -37,11 +36,10 @@ Scene.prototype.initializeData = function () {
 	return data;
 }
 
-Scene.prototype.plotEachPixel = function(callback, data) {
-	let imageData = this.context.getImageData(0, 0, this.width, this.height)
+function stepThroughEachPixel(pixelColoringCallback, data, imageData) {
 	for (let i = 0; i < this.width; i += 1) {
 		for (let j = 0; j < this.height; j += 1) {
-			const {red, green, blue} = callback.call(this, i, j, data)
+			const {red, green, blue} = pixelColoringCallback.call(this, i, j, data)
 
 			let index = (i + j * this.width) * 4
 
@@ -51,13 +49,19 @@ Scene.prototype.plotEachPixel = function(callback, data) {
 			imageData.data[index + 3] = 255
 		}
 	}
+}
+
+Scene.prototype.plotEachPixel = function(callback, data) {
+	let imageData = this.context.getImageData(0, 0, this.width, this.height)
+	stepThroughEachPixel.call(this, callback, data, imageData);
 	this.context.putImageData(imageData, 0, 0)
 }
 
-Scene.prototype.drawRectangleBasedObjects = function(callback, data) {
-	callback.call(this, data)
+Scene.prototype.drawRectangleBasedObjects = function(callbacks, data) {
+	for(let callback in callbacks) {
+		callbacks[callback].call(this, data)
+	}
 }
-
 
 Scene.prototype.mandelbrot = function(i, j, data) {
 	let x = this.frame.left + this.frame.stepX * i
@@ -106,7 +110,7 @@ Scene.prototype.drawPlot = function() {
 	let data = this.initializeData()
 
 	// MANDELBROT
-	this.plotEachPixel(this.mandelbrot, data)
+	this.plotEachPixel(this.colorTest, data)
 
 	// COLOR TEST
 	// this.plotEachPixel(this.colorTest, data)
@@ -114,7 +118,7 @@ Scene.prototype.drawPlot = function() {
 	// GRAPHING CALCULATOR
 	// this.plotEachPixel(this.graphingCalculator, data)
 
-	this.drawRectangleBasedObjects(this.mandelbrotSeed, data)
+	this.drawRectangleBasedObjects([this.drawAxes, this.mandelbrotSeed], data)
 
 }
 
