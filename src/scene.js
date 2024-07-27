@@ -1,10 +1,11 @@
 const RESOLUTION = 120
 
-let Scene = function(canvas, frame) {
+let Scene = function(canvas, frame, imageData) {
 	this.context = canvas.getContext('2d')
 	this.width = canvas.width
 	this.height = canvas.height
-	
+	this.imageData = imageData
+
 	this.frame = frame
 }
 
@@ -65,9 +66,8 @@ function stepThroughEachPixel(pixelColoringCallback, data, imageData) {
 }
 
 Scene.prototype.plotEachPixel = function(callback, data) {
-	let imageData = this.context.getImageData(0, 0, this.width, this.height)
-	stepThroughEachPixel.call(this, callback, data, imageData);
-	this.context.putImageData(imageData, 0, 0)
+	stepThroughEachPixel.call(this, callback, data, this.imageData);
+	this.context.putImageData(this.imageData, 0, 0)
 }
 
 Scene.prototype.drawRectangleBasedObjects = function(callbacks, data) {

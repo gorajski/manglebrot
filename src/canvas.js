@@ -2,24 +2,25 @@ let canvas = document.querySelector('canvas')
 canvas.width = Number(innerWidth);
 canvas.height = Number(innerHeight);
 
+let c = canvas.getContext('2d')
+let imageData = c.getImageData(0, 0, canvas.width, canvas.height)
 let frame = new ViewFrame(-2.5, 2.5, -2.5, 2.5, canvas.width, canvas.height)
 
 requestAnimationFrame(drawScene)
 
 function drawScene() {
-	let c = canvas.getContext('2d')
 	c.clearRect(0, 0, innerWidth, innerHeight)  // needed?
 
 	frame.updateStepSizes(canvas.width, canvas.height)
 
-	let scene = new Scene(canvas, frame)
+	let scene = new Scene(canvas, frame, imageData)
 	scene.draw()
 }
 
 window.addEventListener('resize', () => {
 	canvas.width = Number(innerWidth);
 	canvas.height = Number(innerHeight);
-
+	imageData = c.getImageData(0, 0, canvas.width, canvas.height)
 	drawScene()
 })
 
