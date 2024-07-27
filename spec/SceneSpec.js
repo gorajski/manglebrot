@@ -1,5 +1,5 @@
 describe("Scene", function () {
-	describe("calculateSceneCoordinate", function() {
+	describe("calculatePixelValue", function() {
 		it("converts the origin frame coordinate into the origin scene coordinate", function() {
 			let canvas = {
 				getContext: function (dummy) {
@@ -22,7 +22,7 @@ describe("Scene", function () {
 			let expectedSceneX = scene.width / 2
 			let expectedSceneY = scene.height / 2
 
-			const result = scene.calculateSceneCoordinate(pointInFrameX, pointInFrameY)
+			const result = scene.calculatePixelLocation(pointInFrameX, pointInFrameY)
 
 			expect(result.x).toBe(expectedSceneX)
 			expect(result.y).toBe(expectedSceneY)
@@ -50,7 +50,7 @@ describe("Scene", function () {
 			let expectedSceneX = scene.width / 2			// OK		0
 			let expectedSceneY = scene.height  				// OK		bottom of the screen
 
-			const result = scene.calculateSceneCoordinate(pointInFrameX, pointInFrameY)
+			const result = scene.calculatePixelLocation(pointInFrameX, pointInFrameY)
 
 			expect(result.x).toBe(expectedSceneX)
 			expect(result.y).toBe(expectedSceneY)
@@ -78,7 +78,7 @@ describe("Scene", function () {
 			let expectedSceneX = scene.width / 2
 			let expectedSceneY = 0
 
-			const result = scene.calculateSceneCoordinate(pointInFrameX, pointInFrameY)
+			const result = scene.calculatePixelLocation(pointInFrameX, pointInFrameY)
 
 			expect(result.x).toBe(expectedSceneX)
 			expect(result.y).toBe(expectedSceneY)
@@ -107,7 +107,7 @@ describe("Scene", function () {
 		let expectedSceneX = scene.width
 		let expectedSceneY = scene.height / 2
 
-		const result = scene.calculateSceneCoordinate(pointInFrameX, pointInFrameY)
+		const result = scene.calculatePixelLocation(pointInFrameX, pointInFrameY)
 
 		expect(result.x).toBe(expectedSceneX)
 		expect(result.y).toBe(expectedSceneY)
@@ -135,7 +135,7 @@ describe("Scene", function () {
 		let expectedSceneX = 0
 		let expectedSceneY = scene.height / 2
 
-		const result = scene.calculateSceneCoordinate(pointInFrameX, pointInFrameY)
+		const result = scene.calculatePixelLocation(pointInFrameX, pointInFrameY)
 
 		expect(result.x).toBe(expectedSceneX)
 		expect(result.y).toBe(expectedSceneY)

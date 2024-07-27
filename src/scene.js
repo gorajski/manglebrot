@@ -8,7 +8,7 @@ let Scene = function(canvas, frame) {
 	this.frame = frame
 }
 
-Scene.prototype.calculateSceneCoordinate = function(x, y) {
+Scene.prototype.calculatePixelLocation = function(x, y) {
 	percentX = (x - this.frame.left) / (this.frame.right - this.frame.left)
 	percentY = (this.frame.top - y) / (this.frame.top - this.frame.bottom)
 
@@ -19,7 +19,20 @@ Scene.prototype.calculateSceneCoordinate = function(x, y) {
 }
 
 Scene.prototype.draw = function() {
-	this.drawPlot()
+	let color = "rgb(0,0,0)"
+
+	let data = this.initializeData()
+
+	// MANDELBROT
+	this.plotEachPixel(this.mandelbrot, data)
+
+	// COLOR TEST
+	// this.plotEachPixel(this.colorTest, data)
+
+	// GRAPHING CALCULATOR
+	// this.plotEachPixel(this.graphingCalculator, data)
+
+	this.drawRectangleBasedObjects([this.drawAxes, this.mandelbrotSeed], data)
 }
 
 Scene.prototype.initializeData = function () {
@@ -63,6 +76,7 @@ Scene.prototype.drawRectangleBasedObjects = function(callbacks, data) {
 	}
 }
 
+// Extract to class?
 Scene.prototype.mandelbrot = function(i, j, data) {
 	let x = this.frame.left + this.frame.stepX * i
 	let y = this.frame.top - this.frame.stepY * j
@@ -74,12 +88,7 @@ Scene.prototype.mandelbrot = function(i, j, data) {
 	return color
 }
 
-Scene.prototype.mandelbrotSeed = function(data) {
-	this.context.fillStyle = "#ee00ff"
-	let seed = this.calculateSceneCoordinate(data.z.real, data.z.img)
-	this.context.fillRect(seed.x, seed.y, 4, 4)
-}
-
+// Extract to class?
 Scene.prototype.colorTest = function(i, j, data) {
 	let red = Math.floor(255 * i / this.width)
 	let green = Math.floor(255 * i * j / (2 * this.width * this.height))
@@ -89,6 +98,7 @@ Scene.prototype.colorTest = function(i, j, data) {
 	return color
 }
 
+// Extract to class?
 Scene.prototype.graphingCalculator = function(i, j, data) {
 	let x = this.frame.left + this.frame.stepX * i
 	let y = this.frame.top - this.frame.stepY * j
@@ -104,29 +114,17 @@ Scene.prototype.graphingCalculator = function(i, j, data) {
 }
 
 // Extract to class?
-Scene.prototype.drawPlot = function() {
-	let color = "rgb(0,0,0)"
-
-	let data = this.initializeData()
-
-	// MANDELBROT
-	this.plotEachPixel(this.colorTest, data)
-
-	// COLOR TEST
-	// this.plotEachPixel(this.colorTest, data)
-
-	// GRAPHING CALCULATOR
-	// this.plotEachPixel(this.graphingCalculator, data)
-
-	this.drawRectangleBasedObjects([this.drawAxes, this.mandelbrotSeed], data)
-
+Scene.prototype.mandelbrotSeed = function(data) {
+	this.context.fillStyle = "#ee00ff"
+	let seed = this.calculatePixelLocation(data.z.real, data.z.img)
+	this.context.fillRect(seed.x, seed.y, 4, 4)
 }
 
 // Extract to class?
 Scene.prototype.drawAxes = function() {
 	this.context.fillStyle = "#44ff44"
 
-	let origin = this.calculateSceneCoordinate(this.frame.originX, this.frame.originY)
+	let origin = this.calculatePixelLocation(this.frame.originX, this.frame.originY)
 
 	function drawVerticalAxis() {
 		this.context.fillRect(origin.x, 0, 1, this.height)
